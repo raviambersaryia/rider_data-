@@ -23,7 +23,12 @@ if CONN_STRING:
             pass
         
         # Connection succeeded, setup connection pool
-        pool = ConnectionPool(CONN_STRING, min_size=1, max_size=5)
+        pool = ConnectionPool(
+    conninfo=CONN_STRING,
+    min_size=1,
+    max_size=5,
+    open=True
+)
         db_type = "postgres"
         print("[OK] Database: Connected to PostgreSQL (Neon)")
     except Exception as e:
