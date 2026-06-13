@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Onsurity — Zippee Rider Insurance Profile</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/rider-profile.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    />
+  </head>
+  <body>
+    <div class="animated-bg"></div>
+
+    <header class="header profile-header">
+      <div class="header-container">
+        <div class="logo">
+          <h1>Onsurity Rider Insurance Profile</h1>
+          <p class="header-subtitle">
+            Zippee Insurance Policy for Delivery Executives — coverage summary,
+            policy health, and rider benefits.
+          </p>
+        </div>
+        <div class="header-actions">
+          <a href="index.html" class="btn btn-secondary">← Back to Riders</a>
+          <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container profile-container">
+      <section class="profile-hero glass-card" id="profileHero">
+        <div class="profile-avatar" id="profileAvatar">
+          <img
+            src="https://via.placeholder.com/180x180.png?text=Rider"
+            alt="Rider Photo"
+          />
+        </div>
+        <div class="profile-summary" data-aos="fade-left">
+          <div class="profile-badge-row">
+            <span id="policyBadge" class="status-label status-active"
+              >Active Insurance</span
+            >
+            <span id="eligibilityBadge" class="status-label status-eligible"
+              >Eligible</span
+            >
+          </div>
+
+          <h1 id="profileName">Rider Name</h1>
+          <p class="profile-subtitle">
+            Onsurity — Zippee Insurance Policy for the Delivery Executive
+          </p>
+          <p class="profile-title" id="profileId">Rider ID: —</p>
+          <p class="profile-meta" id="employeeNo">Employee No: —</p>
+          <p class="profile-meta" id="storeName">Store: —</p>
+          <p class="profile-meta" id="brandName">Brand: —</p>
+        </div>
+        <div class="profile-actions-row">
+          <button id="downloadCertificateBtn" class="btn btn-primary">
+            📄 Download Certificate
+          </button>
+          <button id="printSummaryBtn" class="btn btn-secondary">
+            🖨️ Print Summary
+          </button>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <article class="summary-card" data-aos="fade-up">
+          <span class="summary-title">Policy Status</span>
+          <strong id="insuranceStatusLabel">Active</strong>
+        </article>
+        <article class="summary-card" data-aos="fade-up" data-aos-delay="100">
+          <span class="summary-title">Policy Number</span>
+          <strong id="policyNumberLabel">—</strong>
+        </article>
+        <article class="summary-card" data-aos="fade-up" data-aos-delay="200">
+          <span class="summary-title">Days Remaining</span>
+          <strong id="daysRemainingLabel">—</strong>
+        </article>
+        <article class="summary-card" data-aos="fade-up" data-aos-delay="300">
+          <span class="summary-title">Completion Status</span>
+          <strong id="completionStatusLabel">—</strong>
+        </article>
+      </section>
+
+      <section class="profile-grid">
+        <article class="detail-card" data-aos="fade-right">
+          <h2>Insurance Details</h2>
+          <div class="detail-row">
+            <span>Provider</span><strong id="insuranceProviderLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>Start Date</span><strong id="startDateLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>End Date</span><strong id="endDateLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>Coverage Amount</span><strong id="coverageAmountLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>Insurance Eligibility</span><strong id="eligibilityLabel">—</strong>
+          </div>
+        </article>
+
+        <article class="detail-card">
+          <h2>Nominee Detail</h2>
+          <div class="detail-row">
+            <span>Nominee Name</span><strong id="nomineeNameLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>Relationship</span><strong id="nomineeRelationshipLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>Nominee DOB</span><strong id="nomineeDobLabel">—</strong>
+          </div>
+          <div class="detail-row">
+            <span>Policy Provider</span><strong id="providerLabel">—</strong>
+          </div>
+        </article>
+
+        <article class="timeline-card" data-aos="fade-left">
+          <h2>Insurance Status Timeline</h2>
+          <div class="timeline-list" id="timelineList"></div>
+        </article>
+      </section>
+      <section class="action-panel" data-aos="fade-up" data-aos-delay="100">
+        <div class="action-card glass-card">
+          <h2>Onsurity Rider Summary</h2>
+          <p>
+            Use this page to review verified insurance data, policy timeline,
+            nominee details, and coverage alerts for delivery executive riders.
+          </p>
+          <ul>
+            <li>Real-time policy health and expiry alerts</li>
+            <li>Download insurance certificates instantly</li>
+            <li>Print detailed rider coverage summaries</li>
+          </ul>
+        </div>
+      </section>
+
+      <div id="profileNotFound" class="empty-state hidden">
+        <div class="empty-icon">⚠️</div>
+        <p>Rider insurance profile not found.</p>
+        <a href="index.html" class="btn btn-primary">Back to Rider List</a>
+      </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="/static/rider-profile.js"></script>
+  </body>
+</html>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Onsurity — Zippee Rider Insurance Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="animated-bg"></div>
+
+    <header class="header">
+      <div class="header-container">
+        <div class="logo">
+          <h1>🏍️ Onsurity Rider Insurance</h1>
+          <p class="header-subtitle">
+            Zippee Insurance Policy for Delivery Executives — fast rider lookup,
+            policy summaries, and coverage health.
+          </p>
+          <button id="themeToggle" class="theme-toggle-btn">
+            <span class="theme-icon">🌙</span>
+          </button>
+          <button id="menuToggle" class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="dashboard-section" id="dashboardSection">
+        <h2 class="section-title">Dashboard Overview</h2>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+              <h3>Total Riders</h3>
+              <p class="stat-number" id="totalRiders">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-content">
+              <h3>Active Riders</h3>
+              <p class="stat-number" id="activeRiders">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-content">
+              <h3>Pending Insurance</h3>
+              <p class="stat-number" id="pendingInsurance">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🎉</div>
+            <div class="stat-content">
+              <h3>Insurance Completed</h3>
+              <p class="stat-number" id="completedInsurance">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+              <h3>Expiring Policies</h3>
+              <p class="stat-number" id="expiringPolicies">0</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-content">
+              <h3>Recently Activated</h3>
+              <p class="stat-number" id="recentlyActivated">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-actions">
+          <button id="addRiderBtn" class="btn btn-primary">
+            + Add New Rider
+          </button>
+          <button id="exportBtn" class="btn btn-secondary">
+            📥 Export Data
+          </button>
+        </div>
+
+        <div class="search-container">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="🔍 Search by name, email, or employee ID..."
+          />
+
+          <select id="statusFilter" class="search-input">
+            <option value="all">All Insurance Statuses</option>
+            <option value="active">Active Insurance</option>
+            <option value="inactive">Inactive Insurance</option>
+            <option value="pending">Pending Insurance</option>
+            <option value="completed">Completed Insurance</option>
+          </select>
+
+          <button id="searchBtn" class="search-btn">Search</button>
+          <button id="resetSearchBtn" class="search-btn secondary">
+            Reset
+          </button>
+        </div>
+
+        <div class="riders-container" id="ridersContainer">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">📋</div>
+            <p>No riders found. Add your first rider to get started!</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="modal" id="registrationModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="formTitle">New Rider Registration</h2>
+            <button class="close-btn" id="closeFormBtn">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <form id="registrationForm" class="registration-form">
+              <fieldset class="form-section">
+                <legend>Brand & Store Information</legend>
+
+                <div class="form-group">
+                  <label for="brandName">Brand Name *</label>
+                  <input
+                    type="text"
+                    id="brandName"
+                    name="brandName"
+                    placeholder="Enter brand name"
+                    required
+                  />
+                  <span class="error-message" id="brandNameError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="storeName">Store Name *</label>
+                  <input
+                    type="text"
+                    id="storeName"
+                    name="storeName"
+                    placeholder="Enter store name"
+                    required
+                  />
+                  <span class="error-message" id="storeNameError"></span>
+                </div>
+              </fieldset>
+
+              <fieldset class="form-section">
+                <legend>Employee Information</legend>
+
+                <div class="form-group">
+                  <label for="employeeNo">Employee No *</label>
+                  <input
+                    type="text"
+                    id="employeeNo"
+                    name="employeeNo"
+                    placeholder="Enter employee number"
+                    required
+                  />
+                  <span class="error-message" id="employeeNoError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeeName">Employee Name *</label>
+                  <input
+                    type="text"
+                    id="employeeName"
+                    name="employeeName"
+                    placeholder="Enter full name"
+                    required
+                  />
+                  <span class="error-message" id="employeeNameError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeeEmail">Employee Email *</label>
+                  <input
+                    type="email"
+                    id="employeeEmail"
+                    name="employeeEmail"
+                    placeholder="Enter email address"
+                    required
+                  />
+                  <span class="error-message" id="employeeEmailError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeePhone">Employee Mobile Number *</label>
+                  <input
+                    type="tel"
+                    id="employeePhone"
+                    name="employeePhone"
+                    placeholder="10-digit mobile number"
+                    maxlength="10"
+                    required
+                  />
+                  <span class="error-message" id="employeePhoneError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeeGender">Employee Gender *</label>
+                  <select id="employeeGender" name="employeeGender" required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <span class="error-message" id="employeeGenderError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeeDOB">Employee Date of Birth *</label>
+                  <input
+                    type="date"
+                    id="employeeDOB"
+                    name="employeeDOB"
+                    required
+                  />
+                  <span class="error-message" id="employeeDOBError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="panNumber">Employee PAN Number *</label>
+                  <input
+                    type="text"
+                    id="panNumber"
+                    name="panNumber"
+                    placeholder="AAAAA0000A"
+                    maxlength="10"
+                    required
+                  />
+                  <span class="error-message" id="panNumberError"></span>
+                  <small>Format: 5 letters, 4 numbers, 1 letter (e.g., ABCDE1234F)</small>
+                </div>
+
+               </fieldset>
+
+              <fieldset class="form-section">
+                <legend>Address Information</legend>
+
+                <div class="form-group">
+                  <label for="employeeAddress">Employee Address *</label>
+                  <textarea
+                    id="employeeAddress"
+                    name="employeeAddress"
+                    placeholder="Enter full address"
+                    rows="3"
+                    required
+                  ></textarea>
+                  <span class="error-message" id="employeeAddressError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeeCity">City *</label>
+                  <input
+                    type="text"
+                    id="employeeCity"
+                    name="employeeCity"
+                    placeholder="Enter city"
+                    required
+                  />
+                  <span class="error-message" id="employeeCityError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeeState">State *</label>
+                  <select id="employeeState" name="employeeState" required>
+                    <option value="">Select State</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                  </select>
+                  <span class="error-message" id="employeeStateError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="employeePinCode">Pin Code *</label>
+                  <input
+                    type="text"
+                    id="employeePinCode"
+                    name="employeePinCode"
+                    placeholder="6-digit pin code"
+                    maxlength="6"
+                    required
+                  />
+                  <span class="error-message" id="employeePinCodeError"></span>
+                </div>
+              </fieldset>
+
+
+
+              <fieldset class="form-section">
+                <legend>Nominee Information</legend>
+
+                <div class="form-group">
+                  <label for="nomineeName">Nominee Name *</label>
+                  <input
+                    type="text"
+                    id="nomineeName"
+                    name="nomineeName"
+                    placeholder="Enter nominee name"
+                    required
+                  />
+                  <span class="error-message" id="nomineeNameError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="nomineeGender">Nominee Gender *</label>
+                  <select id="nomineeGender" name="nomineeGender" required>
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <span class="error-message" id="nomineeGenderError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="nomineeDOB">Nominee Date of Birth *</label>
+                  <input
+                    type="date"
+                    id="nomineeDOB"
+                    name="nomineeDOB"
+                    required
+                  />
+                  <span class="error-message" id="nomineeDOBError"></span>
+                </div>
+
+                <div class="form-group">
+                  <label for="nomineeRelationship">Nominee Relationship with Employee *</label>
+                  <select
+                    id="nomineeRelationship"
+                    name="nomineeRelationship"
+                    required
+                  >
+                    <option value="">Select Relationship</option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Child">Child</option>
+                    <option value="Parent">Parent</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Guardian">Guardian</option>
+                    <option value="Friend">Friend</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <span class="error-message" id="nomineeRelationshipError"></span>
+                </div>
+              </fieldset>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-submit">
+                  <span class="btn-text">Submit Registration</span>
+                  <span class="loading-spinner" style="display: none"></span>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="cancelFormBtn"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-popup" id="successPopup">
+        <div class="success-content">
+          <div class="success-icon">✓</div>
+          <h3 id="successTitle">Registration Successful!</h3>
+          <p id="successMessage">Rider has been registered successfully.</p>
+          <button class="btn btn-primary" id="successBtn">Close</button>
+        </div>
+      </div>
+
+      <div class="modal" id="deleteModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Confirm Deletion</h2>
+            <button class="close-btn" id="deleteCloseBtn">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Are you sure you want to delete this rider record? This action
+              cannot be undone.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" id="deleteCancelBtn">
+              Cancel
+            </button>
+            <button class="btn btn-danger" id="deleteConfirmBtn">Delete</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>
+        &copy; 2026 Rider Insurance Registration System. All rights reserved.
+      </p>
+    </footer>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
