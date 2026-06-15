@@ -861,7 +861,7 @@ function createRiderCard(rider) {
                 <button class="rider-action-btn rider-edit-btn" onclick="editRider('${rider.id}')">
                     ✏️ Edit
                 </button>
-                <button class="rider-action-btn rider-delete-btn" onclick="openDeleteConfirmation('${rider.id}')">
+                <button class="rider-action-btn " onclick="openDeleteConfirmation('${rider.id}')">
                     🗑️ Delete
                 </button>
             </div>
