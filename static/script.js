@@ -863,7 +863,7 @@ function createRiderCard(rider) {
                 </button>
                 // <button class="rider-action-btn "onclick="openDeleteConfirmation('${rider.id}' )">
                 //     🗑️ Delete
-                // </button>
+                // </button> 
             </div>
         </div>
     `;
