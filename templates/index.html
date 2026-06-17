@@ -86,10 +86,10 @@
         <div class="dashboard-actions">
           <button id="addRiderBtn" class="btn btn-primary">
             + Add New Rider
-          <!-- </button>
-          <!-- <button id="exportBtn" class="btn btn-secondary"> -->
+          </button>
+          <button id="exportBtn" class="btn btn-secondary">
             📥 Export Data
-          </button> -->
+          </button>
         </div>
 
         <div class="search-container">
@@ -147,13 +147,29 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="storeName">Store Name *</label>
+                  <label for="storeNameSelect">Store Name *</label>
+                  <select id="storeNameSelect" required>
+                    <option value="" disabled selected>Select store name</option>
+                    <option value="Kalyan Nagar_mnow">Kalyan Nagar_mnow</option>
+                    <option value="Basaveshwar Nagar_mnow">Basaveshwar Nagar_mnow</option>
+                    <option value="Jakkur_mnow">Jakkur_mnow</option>
+                    <option value="Begur_mnow">Begur_mnow</option>
+                    <option value="Thyagaraja Nagar_mnow">Thyagaraja Nagar_mnow</option>
+                    <option value="Brookfield_mnow">Brookfield_mnow</option>
+                    <option value="Hulimavu_mnow">Hulimavu_mnow</option>
+                    <option value="Sarjapur Road_mnow">Sarjapur Road_mnow</option>
+                    <option value="Manikonda_mnow">Manikonda_mnow</option>
+                    <option value="Gachibowli_mnow">Gachibowli_mnow</option>
+                    <option value="Attapur_Mnow">Attapur_Mnow</option>
+                    <option value="Nizampet_mnow">Nizampet_mnow</option>
+                    <option value="other">Other (Type custom store name)</option>
+                  </select>
                   <input
                     type="text"
                     id="storeName"
                     name="storeName"
-                    placeholder="Enter store name"
-                    required
+                    placeholder="Enter custom store name"
+                    style="margin-top: 10px; display: none;"
                   />
                   <span class="error-message" id="storeNameError"></span>
                 </div>
