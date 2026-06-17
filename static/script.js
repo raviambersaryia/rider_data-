@@ -910,14 +910,14 @@ function createRiderCard(rider) {
                 </div>
             </div>
 
-            <div class="rider-actions">
-                <button class="rider-action-btn rider-edit-btn" onclick="editRider('${rider.id}')">
-                    ✏️ Edit
-                </button>
-                <button class="rider-action-btn rider-delete-btn" onclick="openDeleteConfirmation('${rider.id}')">
-                    🗑️ Delete
-                </button>
-            </div>
+            // <div class="rider-actions">
+            //     <button class="rider-action-btn rider-edit-btn" onclick="editRider('${rider.id}')">
+            //         ✏️ Edit
+            //     </button>
+            //     <button class="rider-action-btn rider-delete-btn" onclick="openDeleteConfirmation('${rider.id}')">
+            //         🗑️ Delete
+            //     </button>
+            // </div>
         </div>
     `;
 
