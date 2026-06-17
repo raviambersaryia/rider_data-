@@ -93,6 +93,24 @@ function setupEventListeners() {
     if (cancelFormBtn) cancelFormBtn.addEventListener('click', closeRegistrationForm);
     if (registrationForm) registrationForm.addEventListener('submit', handleFormSubmit);
 
+    // Dropdown change listener for Store Name selection
+    const storeNameSelect = document.getElementById('storeNameSelect');
+    const storeNameInput = document.getElementById('storeName');
+    if (storeNameSelect && storeNameInput) {
+        storeNameSelect.addEventListener('change', function() {
+            if (this.value === 'other') {
+                storeNameInput.style.display = 'block';
+                storeNameInput.value = '';
+                storeNameInput.required = true;
+                storeNameInput.focus();
+            } else {
+                storeNameInput.style.display = 'none';
+                storeNameInput.value = this.value;
+                storeNameInput.required = false;
+            }
+        });
+    }
+
     // Search functionality
     if (searchBtn) searchBtn.addEventListener('click', handleSearch);
     if (resetSearchBtn) resetSearchBtn.addEventListener('click', handleResetSearch);
@@ -145,6 +163,16 @@ function openNewRegistrationForm() {
     registrationForm.reset();
     clearAllErrors();
     updatePhotoPreview();
+    
+    // Reset store name dropdown and input state
+    const storeNameSelect = document.getElementById('storeNameSelect');
+    const storeNameInput = document.getElementById('storeName');
+    if (storeNameSelect && storeNameInput) {
+        storeNameSelect.value = '';
+        storeNameInput.value = '';
+        storeNameInput.style.display = 'none';
+        storeNameInput.required = false;
+    }
     
     // Enable editing on key fields (like Employee No, which is read-only during edit)
     document.getElementById('employeeNo').disabled = false;
@@ -596,7 +624,32 @@ async function editRider(riderId) {
 
     // Populate form fields from API data (handles both db structures transparently)
     document.getElementById('brandName').value = rider.brandName || '';
-    document.getElementById('storeName').value = rider.storeName || '';
+    
+    // Populate store name dropdown and input state
+    const storeName = rider.storeName || '';
+    const storeNameSelect = document.getElementById('storeNameSelect');
+    const storeNameInput = document.getElementById('storeName');
+    if (storeNameSelect && storeNameInput) {
+        const isPreset = Array.from(storeNameSelect.options).some(opt => opt.value === storeName);
+        if (isPreset && storeName !== '') {
+            storeNameSelect.value = storeName;
+            storeNameInput.value = storeName;
+            storeNameInput.style.display = 'none';
+            storeNameInput.required = false;
+        } else if (storeName === '') {
+            storeNameSelect.value = '';
+            storeNameInput.value = '';
+            storeNameInput.style.display = 'none';
+            storeNameInput.required = false;
+        } else {
+            storeNameSelect.value = 'other';
+            storeNameInput.value = storeName;
+            storeNameInput.style.display = 'block';
+            storeNameInput.required = true;
+        }
+    } else {
+        document.getElementById('storeName').value = storeName;
+    }
     document.getElementById('employeeNo').value = rider.employeeNo || '';
     document.getElementById('employeeName').value = rider.employeeName || '';
     document.getElementById('employeeEmail').value = rider.employeeEmail || '';
@@ -861,7 +914,9 @@ function createRiderCard(rider) {
                 <button class="rider-action-btn rider-edit-btn" onclick="editRider('${rider.id}')">
                     ✏️ Edit
                 </button>
-                
+                <button class="rider-action-btn rider-delete-btn" onclick="openDeleteConfirmation('${rider.id}')">
+                    🗑️ Delete
+                </button>
             </div>
         </div>
     `;
