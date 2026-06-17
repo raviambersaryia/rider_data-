@@ -854,23 +854,43 @@ function createRiderCard(rider) {
     const card = document.createElement('div');
     card.className = 'rider-card';
 
+    // Check if current search query is numeric (contains only digits)
+    const isNumberSearch = appState.searchTerm && /^\d+$/.test(appState.searchTerm.trim());
+
     // Format fields
     const statusClass = rider.insuranceStatus || 'inactive';
     const employeeName = rider.employeeName || 'N/A';
-    const employeeNo = rider.employeeNo || 'N/A';
-    const employeeEmail = rider.employeeEmail || 'N/A';
-    const employeePhone = rider.employeePhone || 'N/A';
-    const employeeCity = rider.employeeCity || 'N/A';
-    const employeeState = rider.employeeState || 'N/A';
-    const brandName = rider.brandName || 'N/A';
-    const storeName = rider.storeName || 'N/A';
-    const nomineeName = rider.nomineeName || 'N/A';
-    const nomineeRelationship = rider.nomineeRelationship || 'N/A';
+    
+    // Mask details if search is not numeric
+    const employeeNo = isNumberSearch ? (rider.employeeNo || 'N/A') : '*****';
+    const employeeEmail = isNumberSearch ? (rider.employeeEmail || 'N/A') : '*****';
+    const employeePhone = isNumberSearch ? (rider.employeePhone || 'N/A') : '*****';
+    const employeeCity = isNumberSearch ? (rider.employeeCity || 'N/A') : '*****';
+    const employeeState = isNumberSearch ? (rider.employeeState || 'N/A') : '*****';
+    const brandName = isNumberSearch ? (rider.brandName || 'N/A') : '*****';
+    const storeName = rider.storeName || 'N/A'; // Always show store name
+    const nomineeName = isNumberSearch ? (rider.nomineeName || 'N/A') : '*****';
+    const nomineeRelationship = isNumberSearch ? (rider.nomineeRelationship || 'N/A') : '*****';
     
     let photoHtml = `<span>${employeeName.charAt(0).toUpperCase() || '👤'}</span>`;
-    if (rider.profilePhoto) {
+    if (rider.profilePhoto && isNumberSearch) {
         photoHtml = `<img src="${rider.profilePhoto}" alt="${escapeHtml(employeeName)}" />`;
     }
+
+    const actionsHtml = isNumberSearch ? `
+        <div class="rider-actions">
+            <button class="rider-action-btn rider-edit-btn" onclick="editRider('${rider.id}')">
+                ✏️ Edit
+            </button>
+            <button class="rider-action-btn rider-delete-btn" onclick="openDeleteConfirmation('${rider.id}')">
+                🗑️ Delete
+            </button>
+        </div>
+    ` : `
+        <div class="rider-actions" style="justify-content: center; align-items: center; color: var(--text-light); font-size: 0.85rem; font-style: italic; border-top: 1px dashed var(--border-color); padding-top: 0.75rem; margin-top: 0.75rem;">
+            🔒 Search by Number to Edit/Delete
+        </div>
+    `;
 
     card.innerHTML = `
         <div class="rider-photo">
@@ -880,11 +900,11 @@ function createRiderCard(rider) {
             <div class="rider-header">
                 <div>
                     <h3 class="rider-name">
-                        <a href="rider-profile.html?id=${encodeURIComponent(rider.id)}" class="rider-name-link">${escapeHtml(employeeName)}</a>
+                        <a href="rider-profile.html?id=${encodeURIComponent(rider.id)}${isNumberSearch ? '&verified=true' : ''}" class="rider-name-link">${escapeHtml(employeeName)}</a>
                     </h3>
                     <p class="rider-meta">${escapeHtml(brandName)} • ${escapeHtml(storeName)}</p>
                 </div>
-                <span class="rider-status ${statusClass}">${capitalize(statusClass)}</span>
+                <span class="rider-status ${statusClass}">${isNumberSearch ? capitalize(statusClass) : '*****'}</span>
             </div>
 
             <div class="rider-details">
@@ -902,16 +922,15 @@ function createRiderCard(rider) {
                 </div>
                 <div class="rider-info-item">
                     <span class="rider-info-label">📍 Location:</span>
-                    <span class="rider-info-value">${escapeHtml(employeeCity)}, ${escapeHtml(employeeState)}</span>
+                    <span class="rider-info-value">${escapeHtml(employeeCity)}${isNumberSearch ? ', ' + escapeHtml(employeeState) : ''}</span>
                 </div>
                 <div class="rider-info-item">
                     <span class="rider-info-label">👤 Nominee:</span>
-                    <span class="rider-info-value">${escapeHtml(nomineeName)} (${nomineeRelationship})</span>
+                    <span class="rider-info-value">${escapeHtml(nomineeName)}${isNumberSearch ? ' (' + nomineeRelationship + ')' : ''}</span>
                 </div>
             </div>
 
-           
-             </div>
+            ${actionsHtml}
         </div>
     `;
 

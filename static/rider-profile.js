@@ -23,6 +23,8 @@ function formatDate(value) {
     });
 }
 
+let isUnlocked = false;
+
 async function initProfilePage() {
     AOS.init({
         duration: 800,
@@ -32,6 +34,8 @@ async function initProfilePage() {
     });
 
     const riderId = getQueryParam('id');
+    isUnlocked = getQueryParam('verified') === 'true';
+
     const heroSection = document.getElementById('profileHero');
     const notFound = document.getElementById('profileNotFound');
     const themeToggle = document.getElementById('themeToggle');
@@ -72,18 +76,58 @@ async function initProfilePage() {
         return;
     }
 
+    // Bind verification button logic
+    const verifyInput = document.getElementById('profileUnlockInput');
+    const verifyBtn = document.getElementById('profileUnlockBtn');
+    const verifyError = document.getElementById('profileUnlockError');
+
+    if (verifyBtn && verifyInput) {
+        const doUnlock = () => {
+            const val = verifyInput.value.trim();
+            if (!val) {
+                verifyError.textContent = 'Please enter verification details.';
+                verifyError.style.display = 'block';
+                return;
+            }
+            if (val === String(rider.employeePhone) || val === String(rider.employeeNo)) {
+                isUnlocked = true;
+                verifyError.style.display = 'none';
+                renderRiderProfile(rider);
+            } else {
+                verifyError.textContent = 'Verification failed. Incorrect Employee ID or Mobile Number.';
+                verifyError.style.display = 'block';
+            }
+        };
+        verifyBtn.addEventListener('click', doUnlock);
+        verifyInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') doUnlock();
+        });
+    }
+
     renderRiderProfile(rider);
     
     if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
     
     const downloadBtn = document.getElementById('downloadCertificateBtn');
     if (downloadBtn) {
-        downloadBtn.addEventListener('click', () => downloadCertificate(rider));
+        downloadBtn.addEventListener('click', () => {
+            if (!isUnlocked) {
+                alert('🔒 Please verify and unlock the profile to download the certificate.');
+                return;
+            }
+            downloadCertificate(rider);
+        });
     }
     
     const printBtn = document.getElementById('printSummaryBtn');
     if (printBtn) {
-        printBtn.addEventListener('click', printSummary);
+        printBtn.addEventListener('click', () => {
+            if (!isUnlocked) {
+                alert('🔒 Please verify and unlock the profile to print the summary.');
+                return;
+            }
+            printSummary();
+        });
     }
 }
 
@@ -109,57 +153,71 @@ function renderRiderProfile(rider) {
     const nomineeRelationshipLabel = document.getElementById('nomineeRelationshipLabel');
     const nomineeDobLabel = document.getElementById('nomineeDobLabel');
     const timelineList = document.getElementById('timelineList');
+    const verifyCard = document.getElementById('profileVerificationCard');
+
+    // Handle verification card display
+    if (verifyCard) {
+        verifyCard.style.display = isUnlocked ? 'none' : 'block';
+    }
 
     // Display profile photo if set
-    if (rider.profilePhoto && photo) {
-        photo.src = rider.profilePhoto;
+    if (photo) {
+        if (isUnlocked && rider.profilePhoto) {
+            photo.src = rider.profilePhoto;
+        } else {
+            photo.src = "https://via.placeholder.com/180x180.png?text=LOCKED";
+        }
     }
 
     // Set insurance statuses
     const insStatus = rider.insuranceStatus || 'pending';
     if (statusBadge) {
-        statusBadge.textContent = `${capitalize(insStatus)} Insurance`;
-        statusBadge.className = `status-label status-${insStatus === 'inactive' ? 'inactive' : 'active'}`;
+        statusBadge.textContent = isUnlocked ? `${capitalize(insStatus)} Insurance` : '*****';
+        statusBadge.className = `status-label status-${isUnlocked && insStatus === 'inactive' ? 'inactive' : 'active'}`;
     }
     
     const eligStatus = rider.insuranceEligibilityStatus || 'pending';
     if (eligibilityBadge) {
-        eligibilityBadge.textContent = capitalize(eligStatus);
-        eligibilityBadge.className = `status-label status-${eligStatus === 'ineligible' ? 'inactive' : 'eligible'}`;
+        eligibilityBadge.textContent = isUnlocked ? capitalize(eligStatus) : '*****';
+        eligibilityBadge.className = `status-label status-${isUnlocked && eligStatus === 'ineligible' ? 'inactive' : 'eligible'}`;
     }
 
     if (profileName) profileName.textContent = rider.employeeName || 'Rider Name';
-    if (profileId) profileId.textContent = `Rider ID: ${rider.id}`;
-    if (employeeNo) employeeNo.textContent = `Employee No: ${rider.employeeNo || '—'}`;
+    if (profileId) profileId.textContent = isUnlocked ? `Rider ID: ${rider.id}` : 'Rider ID: *****';
+    if (employeeNo) employeeNo.textContent = isUnlocked ? `Employee No: ${rider.employeeNo || '—'}` : 'Employee No: *****';
     if (storeName) storeName.textContent = `Store: ${rider.storeName || '—'}`;
     if (brandName) brandName.textContent = `Brand: ${rider.brandName || '—'}`;
 
-    if (insuranceStatusLabel) insuranceStatusLabel.textContent = capitalize(insStatus);
-    if (policyNumberLabel) policyNumberLabel.textContent = rider.insurancePolicyNumber || '—';
-    if (insuranceProviderLabel) insuranceProviderLabel.textContent = rider.insuranceProvider || '—';
-    if (startDateLabel) startDateLabel.textContent = formatDate(rider.insuranceStartDate);
-    if (endDateLabel) endDateLabel.textContent = formatDate(rider.insuranceEndDate);
+    if (insuranceStatusLabel) insuranceStatusLabel.textContent = isUnlocked ? capitalize(insStatus) : '*****';
+    if (policyNumberLabel) policyNumberLabel.textContent = isUnlocked ? (rider.insurancePolicyNumber || '—') : '*****';
+    if (insuranceProviderLabel) insuranceProviderLabel.textContent = isUnlocked ? (rider.insuranceProvider || '—') : '*****';
+    if (startDateLabel) startDateLabel.textContent = isUnlocked ? formatDate(rider.insuranceStartDate) : '*****';
+    if (endDateLabel) endDateLabel.textContent = isUnlocked ? formatDate(rider.insuranceEndDate) : '*****';
     
     if (coverageAmountLabel) {
-        coverageAmountLabel.textContent = rider.coverageAmount ? `₹ ${Number(rider.coverageAmount).toLocaleString('en-IN')}` : '—';
+        coverageAmountLabel.textContent = isUnlocked ? (rider.coverageAmount ? `₹ ${Number(rider.coverageAmount).toLocaleString('en-IN')}` : '—') : '*****';
     }
-    if (eligibilityLabel) eligibilityLabel.textContent = capitalize(eligStatus);
+    if (eligibilityLabel) eligibilityLabel.textContent = isUnlocked ? capitalize(eligStatus) : '*****';
     
-    if (nomineeNameLabel) nomineeNameLabel.textContent = rider.nomineeName || '—';
-    if (nomineeRelationshipLabel) nomineeRelationshipLabel.textContent = rider.nomineeRelationship || '—';
-    if (nomineeDobLabel) nomineeDobLabel.textContent = formatDate(rider.nomineeDOB);
+    if (nomineeNameLabel) nomineeNameLabel.textContent = isUnlocked ? (rider.nomineeName || '—') : '*****';
+    if (nomineeRelationshipLabel) nomineeRelationshipLabel.textContent = isUnlocked ? (rider.nomineeRelationship || '—') : '*****';
+    if (nomineeDobLabel) nomineeDobLabel.textContent = isUnlocked ? formatDate(rider.nomineeDOB) : '*****';
 
     const daysRemaining = getDaysRemaining(rider.insuranceEndDate);
     if (daysRemainingLabel) {
-        daysRemainingLabel.textContent = daysRemaining >= 0 ? `${daysRemaining} days` : 'Expired';
+        daysRemainingLabel.textContent = isUnlocked ? (daysRemaining >= 0 ? `${daysRemaining} days` : 'Expired') : '*****';
     }
     
     if (completionStatusLabel) {
-        completionStatusLabel.textContent = insStatus === 'active' ? 'Policy Active' : insStatus === 'inactive' ? 'Policy Inactive' : 'Pending Activation';
+        completionStatusLabel.textContent = isUnlocked ? (insStatus === 'active' ? 'Policy Active' : insStatus === 'inactive' ? 'Policy Inactive' : 'Pending Activation') : '*****';
     }
 
     if (timelineList) {
-        renderTimeline(rider, timelineList, daysRemaining);
+        if (isUnlocked) {
+            renderTimeline(rider, timelineList, daysRemaining);
+        } else {
+            timelineList.innerHTML = '<div style="text-align: center; color: var(--text-light); padding: 2rem;">🔒 Timeline is locked.</div>';
+        }
     }
 }
 
