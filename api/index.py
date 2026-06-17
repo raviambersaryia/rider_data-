@@ -451,6 +451,14 @@ def serve_profile():
     return render_template('rider-profile.html')
 
 
+@app.route('/security.html', methods=['GET'])
+@app.route('/security', methods=['GET'])
+def serve_security():
+    """Render and serve security.html template"""
+    return render_template('security.html')
+
+
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({'error': 'Endpoint not found'}), 404
