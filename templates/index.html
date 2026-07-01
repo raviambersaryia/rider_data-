@@ -138,19 +138,23 @@
                 <legend>Brand & Store Information</legend>
 
                 <div class="form-group">
-                  <label for="brandName">Brand Name *</label>
-                  <input
-                    type="text"
-                    id="brandName"
-                    name="brandName"
-                    placeholder="Enter brand name"
-                    required
-                  />
-                  <datalist id="brandOptions">
-                  <option value="Mnow"></option>~
-                </datalist>
-                  <span class="error-message" id="brandNameError"></span>
-                </div>
+    <label for="brandName">Brand Name *</label>
+
+    <input
+        type="text"
+        id="brandName"
+        name="brandName"
+        list="brandOptions"
+        placeholder="Select or enter brand name"
+        required
+    />
+
+    <datalist id="brandOptions">
+        <option value="Mnow"></option>
+    </datalist>
+
+    <span class="error-message" id="brandNameError"></span>
+</div>
 
                 <div class="form-group">
                   <label for="storeNameSelect">Store Name *</label>
